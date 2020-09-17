@@ -1,0 +1,307 @@
+openapi: 3.0.0
+info:
+  title: Team-faw-api
+  version: '1.0'
+  description: EDU Q&A Platform where users ask questions and give responses
+  contact:
+    name: Team-faw
+    url: 'https://github.com/TracyNuwagaba/edu_prepvii_faw.git'
+  license: {}
+servers:
+  - url: 'https://api-team-faw.herokuapp.com/api'
+paths:
+  /signup:
+    post:
+      summary: Create a user
+      operationId: post-signup
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                response:
+                  value:
+                    message: User created
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                example-1:
+                  value: {}
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                response:
+                  value:
+                    message: Mail exists
+      description: Create a new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - name
+                - email
+                - password
+            examples:
+              example:
+                value:
+                  name: example
+                  email: example@gmail.com
+                  password: example
+  /login:
+    post:
+      summary: Login user
+      operationId: post-login
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                response:
+                  value:
+                    message: Login successful
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                response:
+                  value:
+                    message: Login failed
+        '403':
+          description: Forbidden
+      description: Login user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+            examples:
+              example:
+                value:
+                  email: string
+                  '': string
+          application/xml:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+            examples:
+              example:
+                value: |-
+                  {
+                    "email": "example@gmail.com",
+                    "password": "example"
+                  }
+  /questions:
+    get:
+      summary: Get questions
+      tags: []
+      responses:
+        '200':
+          description: OK
+        '500':
+          description: Internal Server Error
+      operationId: get-questions
+      description: Search questions
+    post:
+      summary: ''
+      operationId: post-questions
+      responses:
+        '201':
+          description: Created
+        '500':
+          description: Internal Server Error
+      description: Post questions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+              required:
+                - description
+            examples:
+              example:
+                value:
+                  description: How old are you?
+  '/questions/:id':
+    get:
+      summary: Search for a question by id
+      tags: []
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      operationId: 'get-questions-:id'
+      description: Search for a question by id
+    delete:
+      summary: Delete a question by id
+      operationId: 'delete-questions-:id'
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: delete a question by id
+  /answers:
+    get:
+      summary: Post answers
+      tags: []
+      responses:
+        '200':
+          description: OK
+        '500':
+          description: Internal Server Error
+      operationId: get-answers
+      description: View answers to questions
+    post:
+      summary: ''
+      operationId: post-answers
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                response:
+                  value:
+                    message: The answer has been submitted
+        '500':
+          description: Internal Server Error
+      description: Post answers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+              required:
+                - description
+            examples:
+              example:
+                value:
+                  description: I am 23 years old
+components:
+  schemas:
+    User:
+      title: User
+      type: object
+      properties:
+        id:
+          type:
+            - string
+            - object
+            - number
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - name
+        - email
+        - password
+      description: User schema
+      x-examples:
+        example:
+          id: null
+          name: tester
+          email: tester@gmail.com
+          password: test
+    Question:
+      title: Question
+      type: object
+      description: Question schema
+      properties:
+        id:
+          type:
+            - string
+            - object
+            - number
+        description:
+          type: string
+      required:
+        - description
+      x-examples:
+        example:
+          id: null
+          description: What is your career plan?
+    Answer:
+      title: Answer
+      type: object
+      description: Answer schema
+      properties:
+        id:
+          type:
+            - string
+            - object
+            - number
+        description:
+          type: string
+      required:
+        - description
+      x-examples:
+        example:
+          id: null
+          description: I want to be a manager next year
